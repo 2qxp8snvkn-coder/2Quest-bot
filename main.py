@@ -40,22 +40,27 @@ async def submit_token(ctx, token: str):
 
 @bot.command()
 async def do_quest(ctx, quest_name: str):
- """Executes a quest using stored credits."""
- user_data = c.execute("SELECT * FROM tokens WHERE owner=?", (ctx.author.name,))
- 
- if user_data.fetchone() and user_data.fetchone()[2] > 0:
- # Simulate quest execution here-replace with actual API calls or actions.
- print(f"Executing {quest_name} for {ctx.author.name}")
- 
- # Decrement credits after successful execution.
- c.execute("UPDATE tokens SET balance=balance-1 WHERE owner=?", (ctx.author.name,))
- conn.commit()
- 
- await ctx.send(f"Quest '{quest_name}' executed successfully!")
- else:
- await ctx.send("Insufficient credits or invalid request.")
+    """Executes a quest using stored credits."""
+
+    c.execute("SELECT * FROM tokens WHERE owner=?", (ctx.author.name,))
+    user_data = c.fetchone()
+
+    if user_data and user_data[2] > 0:
+        # Simulate quest execution here
+        print(f"Executing {quest_name} for {ctx.author.name}")
+
+        # Decrement credits
+        c.execute(
+            "UPDATE tokens SET balance = balance - 1 WHERE owner=?",
+            (ctx.author.name,)
+        )
+        conn.commit()
+
+        await ctx.send(f"Quest '{quest_name}' executed successfully!")
+    else:
+        await ctx.send("Insufficient credits or invalid request.")
 
 # Run the bot with your Discord app token from https://discord.com/developers/applications/
 if __name__ == "__main__":
  import os
- bot.run(os.environ.get('MTUyMDAwNDY2NDMyMDU5Mzk2MA.GYItPZ.rPpIc0vRrwEc5EVzzMGduFQzcZzk4ig6e4l6DE'))
+ bot.run(os.environ.get('DISCORD_APP_TOKEN'))
