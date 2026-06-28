@@ -31,8 +31,8 @@ async def on_ready():
 @bot.command()
 async def submit_token(ctx, token: str):
  """Submits a new token."""
- if validate_token(token):
- await ctx.send("Token already registered!")
+     if validate_token(token):
+       await ctx.send("Token already registered!")
  else:
  c.execute("INSERT INTO tokens VALUES (?, ?, ?)", (token, ctx.author.name, 10))
  conn.commit()
